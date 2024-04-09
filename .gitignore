@@ -1,0 +1,8 @@
+.vscode
+.idea
+__pycache__
+*.log
+*.egg-info
+dist
+build
+.ipynb_checkpoints
