@@ -1,6 +1,6 @@
 from .trivial.value_set import ValueSet, LowercaseCharSet, UppercaseCharSet, DigitCharSet, ConstValue, BinaryCharSet
 from .sequence.sequence import Sequence
-from .helper.cases import Cases
+from .helper.dataset import DataSet
 
 __all__ = [
     "ValueSet",
@@ -11,6 +11,6 @@ __all__ = [
     "ConstValue",
     "DigitCharSet",
     "BinaryCharSet",
-    "Cases",
+    "DataSet",
 ]
 __author__ = "JixiangXiong"

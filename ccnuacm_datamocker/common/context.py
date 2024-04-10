@@ -18,7 +18,6 @@ class DMContext:
         )
         self._random_generator = RandomGenerator(seed=kwargs.get("seed", 0))
         self._work_dir = kwargs.get("work_dir", ".")
-        self._std_path = kwargs.get("std_path", None)
         self._CC = kwargs.get("CC", "gcc")
         self._CXX = kwargs.get("CXX", "g++")
         self._CFLAGS = kwargs.get("CFLAGS", "")
@@ -52,64 +51,59 @@ class DMContext:
         return work_dir_
 
     @property
-    def output_dir(self):
-        output_dir_ = os.path.join(self.work_dir, "output")
-        if not os.path.exists(output_dir_):
-            self.logger.info(f"Creating output directory `{output_dir_}`.")
-            os.makedirs(output_dir_)
-        return output_dir_
+    def std_dir(self):
+        std_dir_ = os.path.join(self.work_dir, "std")
+        if not os.path.exists(std_dir_):
+            self.logger.info(f"Creating work directory `{std_dir_}`.")
+            os.makedirs(std_dir_)
+        return std_dir_
+
+    @property
+    def tmp_dir(self):
+        tmp_dir_ = os.path.join(self.work_dir, "tmp")
+        if not os.path.exists(tmp_dir_):
+            self.logger.info(f"Creating output directory `{tmp_dir_}`.")
+            os.makedirs(tmp_dir_)
+        return tmp_dir_
 
     @work_dir.setter
     def work_dir(self, path):
         if not isinstance(path, str):
             raise ValueError(f"Invalid work_dir: `{path}`, str expected.")
-        self._work_dir = path
+        context().logger.info(f"Setting work directory to `{os.path.abspath(path)}`.")
+        self._work_dir = os.path.abspath(path)
 
     @property
-    def std_path(self):
-        if self._std_path is None:
-            std_path_ = os.path.join(self.work_dir, "std.cpp")
-            if os.path.exists(std_path_):
-                self._std_path = std_path_
-                self.logger.info(f"Using `{std_path_}` as standard solution by default, or you can use "
-                                 f"`ccnuacm_datamocker.set_std_path` to modify it.")
-            else:
-                raise ValueError(f"Cannot find standard solution not found in `{std_path_}`, you can move your "
-                                 f"solution here or use `ccnuacm_datamocker.set_std_path` to set the path. BTW, "
-                                 f"pwd path is {os.getcwd()}.")
-        else:
-            if not os.path.exists(self._std_path):
-                raise ValueError(f"Standard solution not found in `{self._std_path}`, you can move your solution here "
-                                 f"or use `ccnuacm_datamocker.set_std_path` to set the path. BTW, pwd path is "
-                                 f"{os.getcwd()}.")
-        return self._std_path
+    def zip_dir(self):
+        zip_dir_ = os.path.join(self.work_dir, "zip")
+        if not os.path.exists(zip_dir_):
+            self.logger.info(f"Creating zip directory `{zip_dir_}`.")
+            os.makedirs(zip_dir_)
+        return zip_dir_
 
     @property
-    def tmp_path(self):
-        tmp_path_ = os.path.join(self.work_dir, "tmp")
-        if not os.path.exists(tmp_path_):
-            self.logger.info(f"Creating tmp directory `{tmp_path_}`.")
-            os.makedirs(tmp_path_)
-        return tmp_path_
+    def exec_dir(self):
+        exec_dir_ = os.path.join(self.work_dir, "exec")
+        if not os.path.exists(exec_dir_):
+            self.logger.info(f"Creating tmp directory `{exec_dir_}`.")
+            os.makedirs(exec_dir_)
+        return exec_dir_
 
-    @std_path.setter
-    def std_path(self, path: str):
-        path = path.strip()
-        if path == "":
-            raise ValueError("Empty path is not allowed.")
-        if len(path) >= 2 and path[:2] == '$/':
-            path = os.path.join(self.work_dir, path[2:])
+    def clear_tmp(self):
+        self.clear_dir(self.tmp_dir)
+
+    @classmethod
+    def clear_dir(cls, path):
+        context().logger.info(f"Clearing directory `{path}`.")
+        if os.path.exists(path):
+            shutil.rmtree(path)
+        os.makedirs(path)
+
+    @classmethod
+    def make_dir(cls, path):
         if not os.path.exists(path):
-            raise ValueError(f"Standard solution not found in `{path}`, you can move your solution here or use "
-                             f"`ccnuacm_datamocker.set_std_path` to set the path. BTW, pwd path is {os.getcwd()}.")
-        self._std_path = path
-
-    def clear_output(self):
-        output_dir = self.output_dir
-        context().logger.info(f"Clearing output directory `{output_dir}`.")
-        if os.path.exists(output_dir):
-            shutil.rmtree(output_dir)
-        os.makedirs(output_dir)
+            context().logger.info(f"Creating directory `{path}`.")
+            os.makedirs(path)
 
     def set_compile_options(self, *, CC=None, CXX=None, CFLAGS=None, CXXFLAGS=None, LDFLAGS=None):
         if CC is not None:
