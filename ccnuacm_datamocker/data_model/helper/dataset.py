@@ -15,10 +15,10 @@ class DataSet(DataModel):
         out_type = kwargs.pop("out_type", "out")
         super().__init__(*args, **kwargs)
 
-        if name is None:
-            raise ValueError("`zip_file` must be specified.")
         if std_path is None:
             raise ValueError("`std_path` must be specified.")
+        if name is None:
+            name = os.path.basename(std_path)
 
         path = std_path
         if path == "":
