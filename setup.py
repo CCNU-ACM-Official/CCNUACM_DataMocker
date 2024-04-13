@@ -13,8 +13,6 @@ setup(
         "jupyter",
     ],
     classifiers=[
-        "Development Status :: 5 - Production/Unstable",
-        "Intended Audience :: Developers",
         "License :: OSI Approved :: MIT License",
         "Programming Language :: Python",
         "Programming Language :: Python :: 3",
