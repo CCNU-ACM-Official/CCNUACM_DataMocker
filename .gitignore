@@ -10,3 +10,4 @@ examples/tmp
 examples/zip
 .venv
 venv
+*.egg-info
