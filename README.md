@@ -9,7 +9,7 @@ This project is a data mocker for CCNUACM. It is written in Python.
 To install the necessary dependencies, run the following command:
 
 ```bash
-pip3 install -e../ -U
+pip3 install ccnuacm-datamocker
 ```
 
 ## Usage
