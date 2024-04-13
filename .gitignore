@@ -2,10 +2,11 @@
 .idea
 __pycache__
 *.log
-*.egg-info
 dist
 build
 .ipynb_checkpoints
 examples/exec
 examples/tmp
 examples/zip
+.venv
+venv
