@@ -1,9 +1,5 @@
 from setuptools import setup
 
-# 读取 requirements.txt 文件中的依赖项
-with open("requirements.txt") as f:
-    requirements = f.read().splitlines()
-
 setup(
     name="ccnuacm_datamocker",
     version="0.0.1",
@@ -12,7 +8,10 @@ setup(
     author_email="xiongjx751@qq.com",
     url="https://github.com/CCNU-ACM-Official/CCNUACM_DataMocker.git",
     packages=["ccnuacm_datamocker"],
-    install_requires=requirements,
+    install_requires=[
+        "numpy",
+        "jupyter",
+    ],
     classifiers=[
         "Development Status :: 5 - Production/Unstable",
         "Intended Audience :: Developers",
