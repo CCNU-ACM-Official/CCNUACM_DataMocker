@@ -2,6 +2,7 @@ from .project_logger import get_logger
 from .random_generator import RandomGenerator
 import shutil
 import os
+import subprocess
 
 __all__ = ["context"]
 __author__ = "JixiangXiong"
@@ -88,6 +89,21 @@ class DMContext:
             self.logger.info(f"Creating tmp directory `{exec_dir_}`.")
             os.makedirs(exec_dir_)
         return exec_dir_
+
+    @property
+    def CXX(self):
+        return self._CXX
+
+    @CXX.setter
+    def CXX(self, path):
+        context().logger.info(f"Setting CXX to `{path}`.")
+        result = subprocess.run([path, "-dumpversion"], capture_output=True)
+        if result.returncode != 0:
+            raise ValueError(
+                f'Invalid compiler path: `{path}`. Failed to get version. Errmsg:\n{result.stdout.decode("utf-8")}\n'
+                f'{result.stderr.decode("utf-8")}')
+        context().logger.info(f'compiler version: {result.stdout.decode("utf-8").strip()}')
+        self._CXX = path
 
     def clear_tmp(self):
         self.clear_dir(self.tmp_dir)

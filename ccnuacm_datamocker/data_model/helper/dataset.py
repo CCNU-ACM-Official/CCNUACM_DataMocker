@@ -1,3 +1,5 @@
+import subprocess
+
 from ccnuacm_datamocker.data_model.base import DataModel
 import os
 from ccnuacm_datamocker.common import context
@@ -56,7 +58,7 @@ class DataSet(DataModel):
 
     def run(self):
         std_path = self.std_path
-        exe_path = os.path.join(context().exec_dir, self._zip_name)
+        exe_path = os.path.join(context().exec_dir, self._zip_name + ".exe")
         out_dir = self._dir
         cxx = context().get_compile_options("CXX")
         cxxflags = context().get_compile_options("CXXFLAGS")
@@ -66,8 +68,12 @@ class DataSet(DataModel):
             os.remove(exe_path)
         context().logger.info(
             f"Compiling `{std_path}` with command: `{cxx} -o {exe_path} {cxxflags} {ldflags} {std_path}`.")
-        if os.system(f"{cxx} -o {exe_path} {cxxflags} {ldflags} {std_path}"):
-            raise ValueError(f"Failed to compile `{std_path}`.")
+        compile_result = subprocess.run(f"{cxx} -o {exe_path} -O2 -std=c++17 {cxxflags} {ldflags} {std_path}",
+                                        capture_output=True)
+        if compile_result.returncode:
+            raise ValueError(
+                f'Failed to compile `{std_path}`.\nerrmsg:\n{compile_result.stdout.decode("utf-8")}\n'
+                f'{compile_result.stderr.decode("utf-8")}')
         context().logger.info(f"Compiling `{std_path}` succeed.")
 
         context().clear_dir(out_dir)
@@ -81,8 +87,10 @@ class DataSet(DataModel):
                 f.write(str(case))
             context().logger.info(f"Generating infile `{in_file}` succeed.")
             context().logger.info(f"Generating outfile using command: `{exe_path} < {in_file} > {out_file}`.")
-            if os.system(f"{exe_path} < {in_file} > {out_file}"):
-                raise ValueError(f"Failed to exec command: `{exe_path} < {in_file} > {out_file}`.")
+            exec_result = subprocess.run(f"{exe_path} < {in_file} > {out_file}", capture_output=True)
+            if exec_result.returncode:
+                raise ValueError(f"Failed to exec command: `{exe_path} < {in_file} > {out_file}`.\nerrmsg:\n"
+                                 f'{exec_result.stdout.decode("utf-8")}\n{exec_result.stderr.decode("utf-8")}')
             context().logger.info(f"Generating outfile `{out_file}` succeed.")
         context().logger.info(f"All cases generated. Start zipping `{self._zip_name}.zip`...")
 
