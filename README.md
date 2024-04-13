@@ -2,7 +2,8 @@
 
 ## Description
 
-This project is a data mocker for CCNUACM. It is written in Python.
+This project is a data mocker for CCNUACM. It is written in Python. Source code is available
+on our [Github repo:CCNUACM_DataMocker](https://github.com/CCNU-ACM-Official/CCNUACM_DataMocker.git).
 
 ## Installation
 
