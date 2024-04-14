@@ -1,16 +1,27 @@
-from .trivial.value_set import ValueSet, LowercaseCharSet, UppercaseCharSet, DigitCharSet, ConstValue, BinaryCharSet
-from .sequence.sequence import Sequence
+from .trivial.value_set import (
+    ValueSet,
+    LowercaseCharSet,
+    UppercaseCharSet,
+    DigitCharSet,
+    ConstValue,
+    BinaryCharSet,
+)
+from .helper.sequence import Sequence
+from .helper.repetition import Repetition
 from .helper.dataset import DataSet
+from .trivial.random_dist import RandomInt, RandomFloat
 
 __all__ = [
     "ValueSet",
     "LowercaseCharSet",
     "UppercaseCharSet",
-    "DigitCharSet",
     "Sequence",
     "ConstValue",
     "DigitCharSet",
     "BinaryCharSet",
     "DataSet",
+    "RandomInt",
+    "RandomFloat",
+    "Repetition",
 ]
 __author__ = "JixiangXiong"

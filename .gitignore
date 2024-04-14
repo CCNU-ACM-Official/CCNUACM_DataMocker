@@ -8,6 +8,7 @@ build
 examples/exec
 examples/tmp
 examples/zip
+examples/std
 .venv
 venv
 *.egg-info

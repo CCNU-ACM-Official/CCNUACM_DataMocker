@@ -24,6 +24,8 @@ class DMContext:
         self._CFLAGS = kwargs.get("CFLAGS", "")
         self._CXXFLAGS = kwargs.get("CXXFLAGS", "-O2 -std=c++17")
         self._LDFLAGS = kwargs.get("LDFLAGS", "")
+        self._seed = kwargs.get("seed", 0)
+        self._work_dataset = None
 
     @classmethod
     def get_context(cls, name="default", **kwargs):
@@ -40,8 +42,19 @@ class DMContext:
     @property
     def random(self) -> RandomGenerator:
         if self._random_generator is None:
-            raise ValueError(f"RandomGenerator of DMContext(`{self._name}`) is not initialized.")
+            raise ValueError(
+                f"RandomGenerator of DMContext(`{self._name}`) is not initialized."
+            )
         return self._random_generator
+
+    @property
+    def seed(self) -> int:
+        return self._seed
+
+    @seed.setter
+    def seed(self, seed):
+        self._seed = seed
+        self._random_generator.seed = seed
 
     @property
     def work_dir(self):
@@ -101,8 +114,11 @@ class DMContext:
         if result.returncode != 0:
             raise ValueError(
                 f'Invalid compiler path: `{path}`. Failed to get version. Errmsg:\n{result.stdout.decode("utf-8")}\n'
-                f'{result.stderr.decode("utf-8")}')
-        context().logger.info(f'compiler version: {result.stdout.decode("utf-8").strip()}')
+                f'{result.stderr.decode("utf-8")}'
+            )
+        context().logger.info(
+            f'compiler version: {result.stdout.decode("utf-8").strip()}'
+        )
         self._CXX = path
 
     def clear_tmp(self):
@@ -121,7 +137,9 @@ class DMContext:
             context().logger.info(f"Creating directory `{path}`.")
             os.makedirs(path)
 
-    def set_compile_options(self, *, CC=None, CXX=None, CFLAGS=None, CXXFLAGS=None, LDFLAGS=None):
+    def set_compile_options(
+        self, *, CC=None, CXX=None, CFLAGS=None, CXXFLAGS=None, LDFLAGS=None
+    ):
         if CC is not None:
             self._CC = CC
         if CXX is not None:

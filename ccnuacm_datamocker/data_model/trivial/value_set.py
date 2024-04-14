@@ -21,9 +21,10 @@ class ValueSet(DataModel):
         accepted_types = (int, float, str, ConstValue)
         for index, x in enumerate(args):
             if not isinstance(x, accepted_types):
-                raise ValueError(f"All elements in `ValueSet` must be primitive or ConstValue, but get `{repr(x)}` of "
-                                 f"type "
-                                 f"`{type(x)}` in the {index}-th of args.")
+                raise ValueError(
+                    f"All elements in `ValueSet` must be primitive or ConstValue, but get `{repr(x)}` of "
+                    f"type `{type(x)}` in the {index}-th of args."
+                )
         self._arr = sorted(set(str(x) for x in args))
         self._size = len(self._arr)
 
@@ -35,15 +36,20 @@ class ValueSet(DataModel):
     def __len__(self):
         return self._size
 
-    def __add__(self, rhs):
+    def brief(self):
+        return self.__str__()
+
+    def __or__(self, rhs):
         if not isinstance(rhs, ValueSet):
             if not isinstance(rhs, Iterable):
-                raise ValueError(f"Cannot add `ValueSet` with `{rhs.__class__.__name__}`.")
+                raise ValueError(
+                    f"Cannot add `ValueSet` with `{rhs.__class__.__name__}`."
+                )
             rhs = ValueSet(*self._arr, *rhs)
         return ValueSet(*self._arr, *rhs._arr)
 
-    def __radd__(self, lhs):
-        return lhs.__add__(self)
+    def __ror__(self, lhs):
+        return lhs.__or__(self)
 
 
 class ConstValue(ValueSet):
@@ -57,29 +63,29 @@ class ConstValue(ValueSet):
 
 class LowercaseCharSet(ValueSet):
     def __init__(self, **kwargs):
-        charset = 'abcdefghijklmnopqrstuvwxyz'
+        charset = "abcdefghijklmnopqrstuvwxyz"
         super().__init__(*charset, **kwargs)
 
 
 class UppercaseCharSet(ValueSet):
     def __init__(self, **kwargs):
-        charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+        charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
         super().__init__(*charset, **kwargs)
 
 
 class DigitCharSet(ValueSet):
     def __init__(self, **kwargs):
-        charset = '0123456789'
+        charset = "0123456789"
         super().__init__(*charset, **kwargs)
 
 
 class AlphabetCharSet(ValueSet):
     def __init__(self, **kwargs):
-        charset = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
+        charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
         super().__init__(*charset, **kwargs)
 
 
 class BinaryCharSet(ValueSet):
     def __init__(self, **kwargs):
-        charset = '01'
+        charset = "01"
         super().__init__(*charset, **kwargs)
