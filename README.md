@@ -15,7 +15,7 @@ pip3 install ccnuacm-datamocker -U
 
 ## Usage
 
-Following is a basic example of how to use the data mocker. More examples are avaliable [here](https://github.com/CCNU-ACM-Official/CCNUACM_DataMocker/tree/578ac35f3dbea1733bbbed94b38e8669b26bd4dc/examples).
+Following is a basic example of how to use the data mocker. More examples are avaliable [here](examples).
 
 ```python
 import ccnuacm_datamocker as dm
