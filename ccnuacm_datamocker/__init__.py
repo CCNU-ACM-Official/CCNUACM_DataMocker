@@ -4,7 +4,7 @@ __author__ = "JixiangXiong"
 
 def set_seed(seed_):
     from .common import context
-    context().random.set_seed(seed_)
+    context().seed = seed_
     context().logger.info(f"Setting random seed to `{seed_}`")
 
 

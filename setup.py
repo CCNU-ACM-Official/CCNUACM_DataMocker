@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name="ccnuacm_datamocker",
-    version="0.0.3",
+    version="0.0.4",
     description="A data mocking library for CCNU ACM",
     author="JixiangXiong",
     author_email="xiongjx751@qq.com",
@@ -11,6 +11,7 @@ setup(
     install_requires=[
         "numpy",
         "jupyter",
+        "tqdm",
     ],
     classifiers=[
         "License :: OSI Approved :: MIT License",
@@ -18,6 +19,6 @@ setup(
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.10",
     ],
-    long_description=open("README.md", "r", encoding='utf-8').read(),
+    long_description=open("README.md", "r", encoding="utf-8").read(),
     long_description_content_type="text/markdown",
 )

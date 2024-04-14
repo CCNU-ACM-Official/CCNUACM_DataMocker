@@ -15,23 +15,51 @@ pip3 install ccnuacm-datamocker -U
 
 ## Usage
 
-Here is a basic example of how to use the data mocker:
+Following is a basic example of how to use the data mocker. More examples are avaliable [here](https://github.com/CCNU-ACM-Official/CCNUACM_DataMocker/tree/578ac35f3dbea1733bbbed94b38e8669b26bd4dc/examples).
 
 ```python
-from ccnuacm_datamocker.data_model import *
 import ccnuacm_datamocker as dm
+from ccnuacm_datamocker.data_model import *
+import os
 
-dm.set_seed(751)
+dm.set_seed(0)
 dm.set_work_dir(".")
 dm.set_compiler("D:/mingw/bin/g++.exe")
 
-ds = DataSet(name="P751", std_path="./std/P751.cpp")
+os.makedirs("./std", exist_ok=True)
 
-ds.add(Sequence(LowercaseCharSet() + DigitCharSet(), length=10, sep=''))
-ds.add(Sequence(BinaryCharSet(), length=10, sep=' '))
+open("./std/APlusB.cpp", "w").write(
+    """
+#include <iostream>
+
+int32_t main() {
+  int64_t T;
+  std::cin >> T;
+  while (T--) {
+    int64_t a, b;
+    std::cin >> a >> b;
+    std::cout << a + b << '\\n';
+  }
+  return 0;
+}
+"""
+)
+
+ds = DataSet(name="APlusB", std_path="./std/APlusB.cpp")
+
+ds.add(
+    RandomInt(low=1, high=100)
+    .repeat(times=2, sep=" ")
+    .repeat(times=10, sep="\n", show_times=True, h_sep="\n"),
+    reputation=2,
+)
+
+ds.show()
 
 ds.run()
 ```
+
+
 
 ## Contributing
 

@@ -1,5 +1,6 @@
 from ccnuacm_datamocker.common import context
 import pprint
+import copy
 
 __all__ = ["DataModel"]
 __author__ = "JixiangXiong"
@@ -23,7 +24,7 @@ class DataModel:
         self._model_type = model_type
         self._alias = alias
 
-        accepted_types = (int, float, str, DataModel)
+        accepted_types = (int, float, str, DataModel, list, tuple)
         if not all(isinstance(x, accepted_types) for x in args):
             raise ValueError(
                 f"All elements in `DataModel` must be DataModel or primitive types, but get `{repr(args)}`."
@@ -38,12 +39,10 @@ class DataModel:
         )
 
     def __repr__(self) -> str:
-        return (
-            f"<{self._model_type}:{self._alias}>@\n{pprint.pformat(vars(self), width=2)}"
-        )
+        return f"<{self._model_type}:{self._alias}>@\n{pprint.pformat(vars(self), width=2)}\nbrief:\n{self.brief()}"
 
     def __str__(self) -> str:
-        raise NotImplementedError
+        raise NotImplementedError()
 
     def __eq__(self, other):
         if isinstance(other, self.__class__):
@@ -59,3 +58,39 @@ class DataModel:
 
     def run(self):
         return self.__str__()
+
+    def repeat(
+        self,
+        *,
+        times: int = None,
+        show_times: bool = None,
+        sep=" ",
+        h_sep="\n",
+    ):
+        from ..helper.repetition import Repetition
+
+        if times is None:
+            raise ValueError("Repetition must have `times` specified.")
+        if show_times is None:
+            show_times = False
+        return Repetition(
+            copy.deepcopy(self),
+            times=times,
+            show_times=show_times,
+            sep=sep,
+            h_sep=h_sep,
+        )
+
+    def brief(self):
+        raise NotImplementedError()
+
+    def show(self):
+        print(self.brief())
+
+    def __add__(self, rhs):
+        from ..helper.sequence import RawSequence
+
+        return RawSequence(self, rhs)
+
+    def __radd__(self, lhs):
+        return lhs.__add__(self)
