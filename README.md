@@ -15,7 +15,7 @@ pip3 install ccnuacm-datamocker -U
 
 ## Usage
 
-Following is a basic example of how to use the data mocker. More examples are avaliable [here](examples).
+Following is a basic example of how to use the data mocker. More examples are avaliable [here](https://github.com/CCNU-ACM-Official/CCNUACM_DataMocker/tree/master/examples).
 
 ```python
 import ccnuacm_datamocker as dm
@@ -67,7 +67,7 @@ Contributions are welcome. Please submit a pull request or create an issue to di
 
 ## License
 
-This project is licensed under the [MIT License](LICENSE).
+This project is licensed under the [MIT License](https://github.com/CCNU-ACM-Official/CCNUACM_DataMocker/blob/master/LICENSE).
 
 ## Contact
 
