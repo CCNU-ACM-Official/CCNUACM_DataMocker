@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name="ccnuacm_datamocker",
-    version="0.0.4",
+    version="0.0.5",
     description="A data mocking library for CCNU ACM",
     author="JixiangXiong",
     author_email="xiongjx751@qq.com",
